@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入JQuery的相关文件
+         JQuery.js要在Bootstrap之前引入，因为Bootstrap.js
+         是在JQuery的基础上实现的
+     -->
+    <script type="application/javascript"
+            src="static/jquery-3.6.1.min.js">
+    </script>
+    <!-- 引入Bootstrap的相关文件 -->
+    <script type="application/javascript"
+            src="static/bootstrap.min.js"></script>
+    <link type="text/css"
+          rel="stylesheet"
+          href="static/bootstrap.min.css"/>
+    <style type="text/css">
+        body{
+            padding: 100px;
+        }
+        #add-btn{
+            margin-bottom: 10px;
+        }
+        #search-form{
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<form id="search-form" class="form-inline">
+    <div class="form-group">
+        <label class="control-label">书籍名字</label>
+        <input id="bookName" class="form-control" placeholder="请输入书籍名字"/>
+    </div>
+    <div class="form-group">
+        <label class="control-label">作者姓名</label>
+        <input id="author" class="form-control" placeholder="请输入作者姓名"/>
+    </div>
+    <button onclick="getList()" type="button" class="btn btn-success">查询</button>
+</form>
+<button id="add-btn" type="button" class="btn btn-primary" onclick="toAdd()">新增图书</button>
+<table id="book-table" class="table table-bordered">
+    <thead>
+    <tr>
+        <td>书名</td>
+        <td>作者</td>
+        <td>出版时间</td>
+        <td>字数（万字）</td>
+        <td>定价</td>
+        <td>入库时间</td>
+        <td>图书状态</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+</body>
+<script type="application/javascript">
+    $(function (){
+        // 页面元素加载完毕 发送请求获取员工列表数据
+        getList();
+    })
+    function getList(){
+        // 获取查询条件参数
+        var bookName = $('#bookName').val();
+        var author = $('#author').val();
+
+        $.ajax({
+            url:'http://localhost:8081/book',
+            type:'POST',
+            data:{
+                method:'getList',
+                bookName,author
+            },
+            success:function (res){
+                console.log(res);
+                var BookList = res.data;
+                var dataStr = "";
+                BookList.forEach((item,index)=>{
+                    dataStr += "<tr>";
+                    dataStr += "<td>" + item.bookName + "</td>";
+                    dataStr += "<td>" + item.author + "</td>";
+                    dataStr += "<td>" + item.pubDate + "</td>";
+                    dataStr += "<td>" + item.wordNumber + "</td>";
+                    dataStr += "<td>" + item.price + "</td>";
+                    dataStr += "<td>" + item.enterTime + "</td>";
+                    dataStr += "<td>" + item.status + "</td>";
+                    dataStr += "<td>" +
+                        "<button onclick='updateById("+item.id+")' type='button' class='btn btn-success'>更新</button>" +
+                        "<button onclick='deleteById("+item.id+")' type='button' class='btn btn-danger'>删除</button>" +
+                        "</td>"
+                    dataStr += "</tr>";
+                })
+                $("tbody").html(dataStr);
+            }
+        })
+    }
+    function deleteById(id){
+        $.ajax({
+            url:'http://localhost:8081/book',
+            type: 'POST',
+            data:{
+                method:'delete',
+                id:id
+            },
+            success:function (res){
+                alert(res.msg);
+                getList()
+            }
+        })
+    }
+    function updateById(id){
+        $(location).attr("href","editBook.html?id="+id);
+    }
+    function toAdd(){
+        $(location).attr("href","addBook.html");
+    }
+</script>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入JQuery的相关文件
+         JQuery.js要在Bootstrap之前引入，因为Bootstrap.js
+         是在JQuery的基础上实现的
+     -->
+    <script type="application/javascript"
+            src="static/jquery-3.6.1.min.js">
+    </script>
+    <!-- 引入Bootstrap的相关文件 -->
+    <script type="application/javascript"
+            src="static/bootstrap.min.js"></script>
+    <link type="text/css"
+          rel="stylesheet"
+          href="static/bootstrap.min.css"/>
+    <style type="text/css">
+        body{
+            padding: 100px;
+        }
+        #add-btn{
+            margin-bottom: 10px;
+        }
+        #search-form{
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<form id="search-form" class="form-inline">
+    <div class="form-group">
+        <label class="control-label">书籍名字</label>
+        <input id="bookName" class="form-control" placeholder="请输入书籍名字"/>
+    </div>
+    <button id="add-btn" onclick="getList()" type="button" class="btn btn-success">查询</button>
+</form>
+<table id="book-table" class="table table-bordered">
+    <thead>
+    <tr>
+        <td>书籍ID</td>
+        <td>借阅人姓名</td>
+        <td>借阅人学号</td>
+        <td>联系方式</td>
+        <td>借出时间</td>
+        <td>归还时间</td>
+        <td>归还时状态(1是完好，2是破损)</td>
+        <td>备注信息</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+</body>
+<script type="application/javascript">
+    function getParamByName(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    function getList(){
+            var bookName = $("#bookName").val();
+
+
+            // 发送 异步请求
+            $.ajax({
+                // 向什么地方发送ajax请求
+                url:'http://localhost:8081/search',
+                // 请求的方式 默认是get
+                type:'POST',
+                // 携带的参数  对象类型
+                data:{
+                    "method":'info',
+                    "bookName":bookName
+                },
+                // 请求成功时调用的函数  res返回的结果
+                success: function (res){
+                    console.log(res);
+                    var RecordList = res.data;
+                    var dataStr = "";
+                    RecordList.forEach((item,index)=>{
+                        dataStr += "<tr>";
+                        dataStr += "<td>" + item.bookId + "</td>";
+                        dataStr += "<td>" + item.borrowerName + "</td>";
+                        dataStr += "<td>" + item.borrowerSno + "</td>";
+                        dataStr += "<td>" + item.phone + "</td>";
+                        dataStr += "<td>" + item.borrowTime + "</td>";
+                        dataStr += "<td>" + item.returnTime + "</td>";
+                        dataStr += "<td>" + item.returnState + "</td>";
+                        dataStr += "<td>" + item.remarks + "</td>";
+                        dataStr += "</tr>";
+                    })
+                    $("tbody").html(dataStr);
+                }
+            })
+    }
+</script>
+</html>

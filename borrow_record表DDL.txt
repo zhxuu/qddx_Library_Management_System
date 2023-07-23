@@ -1,0 +1,12 @@
+CREATE TABLE `borrow_record` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `book_id` int DEFAULT NULL COMMENT '书籍ID',
+  `borrower_name` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '借阅人姓名',
+  `borrower_sno` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '借阅人学号',
+  `phone` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '联系方式',
+  `borrow_time` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '借出时间',
+  `return_time` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '归还时间',
+  `return_state` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '归还时状态（完好，破损）',
+  `remarks` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

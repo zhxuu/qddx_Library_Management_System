@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <meta name="googlebot" content="noindex, nofollow"/>
+    <title>登录界面 - JSRUN 驱动</title>
+    <script type="application/javascript"
+            src="static/jquery-3.6.1.min.js">
+    </script>
+    <!-- 引入Bootstrap的相关文件 -->
+    <script type="application/javascript"
+            src="static/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+
+</head>
+<body>
+<div class="mask"></div>
+<div class="container">
+    <div class="login-wrapper">
+        <svg id="peak" viewBox="0 0 1024 1024"><path fill="#FFF" d="M424 233.6L574.4 592c4.8 11.2 16 19.2 28.8 19.2h1.6c12.8 0 24-6.4 28.8-17.6l57.6-118.4 168 337.6H163.2l260.8-579.2m0-57.6c-6.4 0-11.2 3.2-14.4 9.6L113.6 846.4H912L704 433.6c-3.2-6.4-8-8-14.4-8-4.8 0-11.2 3.2-14.4 8l-73.6 147.2-163.2-395.2c-3.2-6.4-8-9.6-14.4-9.6z"></path></svg>
+        <div class="form-control">
+            <label>
+                <input type="text" class="textfield" id="username" maxlength="32"/>
+                <span class="emaillabel">username</span>
+            </label>
+        </div>
+        <div class="form-control">
+            <label>
+                <input type="password" class="textfield" id="password" maxlength="32"/>
+                <span class="passwordlabel">Password</span>
+            </label>
+        </div>
+        <br><br>
+        <!-- <button>Login</button> -->
+        <button onclick="LoginList()" type='button'>
+            <!--<a href="#" class="button" >-->
+                <!--<span></span>-->
+                <!--<span></span>-->
+                <!--<span></span>-->
+                <!--<span></span>-->
+                Login
+            <!--</a>-->
+        </button>
+        <br>
+        <button onclick="registerList()" type='button'>
+            <!--<a href="#" class="button">-->
+                <!--<span></span>-->
+                <!--<span></span>-->
+                <!--<span></span>-->
+                <!--<span></span>-->
+                Register
+            <!--</a>-->
+        </button>
+
+
+    </div>
+</div>
+</body>
+<script type="application/javascript">
+    //document.getElementById("name").value;
+    // function $(id){
+    //     return document.getElementById(id);
+    // }
+    function registerList(){
+            // 获取username
+            var username = $("#username").val();
+            // 获取password
+            var password = $("#password").val();
+            console.log(username);
+
+            // 发送 异步请求
+            $.ajax({
+                // 向什么地方发送ajax请求
+                url:'http://localhost:8081/Register',
+                // 请求的方式 默认是get
+                type:'POST',
+                // 携带的参数  对象类型
+                data:{
+                    "username":username,
+                    password
+                },
+                // 请求成功时调用的函数  res返回的结果
+                success: function (res){
+                    console.log(res);
+                }
+            })
+    }
+
+    function LoginList(){
+        var username = $("#username").val();
+        // 获取password
+        var password = $("#password").val();
+        console.log("username = " + username);
+        console.log("password = " + password);
+        // 发送异步请求加载图书详细信息
+        $.ajax({
+            url:'http://localhost:8081/Login',
+            type:'POST',
+            data:{
+                "method":'info',
+                "username":username
+            },
+
+            success:function (res){
+                var stu = res.data;
+                if(stu.password==password){
+                    $(location).attr("href","main.html");
+                }
+                else{
+                    alert("用户名或密码错误");
+                }
+
+            }
+        })
+    }
+</script>
+
+</html>
+

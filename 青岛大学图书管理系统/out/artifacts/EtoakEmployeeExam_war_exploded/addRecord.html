@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>添加借阅信息</title>
+<!-- 引入JQuery的相关文件
+     JQuery.js要在Bootstrap之前引入，因为Bootstrap.js
+     是在JQuery的基础上实现的
+ -->
+<script type="application/javascript"
+        src="static/jquery-3.6.1.min.js">
+</script>
+<!-- 引入Bootstrap的相关文件 -->
+<script type="application/javascript"
+        src="static/bootstrap.min.js"></script>
+<link type="text/css"
+      rel="stylesheet"
+      href="static/bootstrap.min.css"/>
+<style>
+    .body{
+        text-align: center;
+        padding: 20px 200px;
+    }
+</style>
+</head>
+<body class="body">
+<h3>添加借阅信息</h3>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="control-label col-sm-2">书籍ID</label>
+        <div class="col-sm-10">
+            <input id="bookId" class="form-control" placeholder="请输入书籍ID"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">借阅人姓名</label>
+        <div class="col-sm-10">
+            <input id="borrowerName" class="form-control" placeholder="请输入借阅人姓名"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2">借阅人学号</label>
+        <div class="col-sm-10">
+            <input id="borrowerSno" name="borrowerSno" class="form-control" placeholder="请输入借阅人学号"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">联系方式</label>
+        <div class="col-sm-10">
+            <input id="phone" name="phone" class="form-control" placeholder="请输入借阅人联系方式"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">借出时间</label>
+        <div class="col-sm-10">
+            <input id="borrowTime" class="form-control" placeholder="请输入借出时间"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">归还时间</label>
+        <div class="col-sm-10">
+            <input id="returnTime" class="form-control" placeholder="请输入归还时间"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">归还时状态</label>
+        <label class="radio-inline">
+            <input type="radio" name="returnState" value="1" checked>完好
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="returnState" value="2">破损
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">备注信息</label>
+        <div class="col-sm-10">
+            <input id="remarks" class="form-control" placeholder="请输入备注信息"/>
+        </div>
+    </div>
+    <button id="add-btn" type="button" class="btn btn-success">添加</button>
+    <button type="reset" class="btn btn-warning">重置</button>
+</form>
+</body>
+<script type="application/javascript">
+    //document.getElementById("name").value;
+    $(function (){
+        $("#add-btn").click(function (){
+
+            // 获取bookId
+            var bookId = $("#bookId").val();
+            // if(bookName == null || bookName == ''){
+            //     $('#bookName').closest('.col-sm-10').closest('.form-group').addClass('has-error')
+            //     return;
+            // }
+            // 获取borrowerName
+            var borrowerName = $("#borrowerName").val();
+            //borrowerSno
+            var borrowerSno = $("#borrowerSno").val();
+            // 获取phone
+            var phone = $("#phone").val();
+            // 获取borrowTime
+            var borrowTime = $("#borrowTime").val();
+            // 获取returnTime
+            var returnTime = $("#returnTime").val();
+            //remarks
+            var remarks = $("#remarks").val();
+            // returnState 单选框
+            var returnState = $('input[name="returnState"]:checked').val();
+
+            // 发送 异步请求
+            $.ajax({
+                // 向什么地方发送ajax请求
+                url:'http://localhost:8081/addRecord',
+                // 请求的方式 默认是get
+                type:'POST',
+                // 携带的参数  对象类型
+                data:{
+                    "bookId":bookId,
+                    borrowerName,borrowerSno,phone,borrowTime,returnTime,returnState,remarks
+                },
+                // 请求成功时调用的函数  res返回的结果
+                success: function (res){
+                    // console.log(res);
+                    alert(res.msg);
+                    $(location).attr("href","RecordList.html");
+                }
+            })
+        });
+    })
+</script>
+</html>

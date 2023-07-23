@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.etoak.java.dao.BookAndBorrowDao">
+    <resultMap id="BookInformationResult" type="com.etoak.java.bean.BookInformation">
+        <id column="id" property="id"/>
+        <result column="book_name" property="bookName"/>
+        <result column="author" property="author"/>
+        <result column="pub_date" property="pubDate"/>
+        <result column="word_number" property="wordNumber"/>
+        <result column="price" property="price"/>
+        <result column="enter_time" property="enterTime"/>
+        <result column="status" property="status"/>
+    </resultMap>
+    <resultMap id="BorrowRecordResult" type="com.etoak.java.bean.BorrowRecord">
+        <id column="id" property="id"/>
+        <result column="book_id" property="bookId"/>
+        <result column="borrower_name" property="borrowerName"/>
+        <result column="borrower_sno" property="borrowerSno"/>
+        <result column="phone" property="phone"/>
+        <result column="borrow_time" property="borrowTime"/>
+        <result column="return_time" property="returnTime"/>
+        <result column="return_state" property="returnState"/>
+        <result column="remarks" property="remarks"/>
+    </resultMap>
+    <insert id="addBook" parameterType="com.etoak.java.bean.BookInformation">
+        insert into
+            book_information(book_name,author,pub_date,word_number,price,enter_time,status)
+            values(#{bookName},#{author},#{pubDate},#{wordNumber},#{price},#{enterTime},#{status})
+    </insert>
+    <select id="getAllBooks" resultMap="BookInformationResult">
+        select * from book_information
+    </select>
+    <select id="getBooksById" resultMap="BookInformationResult">
+        select * from book_information where id = #{id}
+    </select>
+    <select id="getIDByName" resultMap="BookInformationResult">
+        select id from book_information where book_name = #{bookName}
+    </select>
+    <select id="getBookList"
+            resultMap="BookInformationResult"
+            parameterType="com.etoak.java.bean.BookInformation">
+        select * from book_information
+        <where>
+            <if test="bookName != null and bookName != ''">
+                and book_name = #{bookName}
+            </if>
+            <if test="author != null and author != ''">
+                and author = #{author}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteById" parameterType="integer">
+        delete from book_information where id=#{id};
+    </delete>
+    <update id="updateById" parameterType="com.etoak.java.bean.BookInformation">
+        update book_information
+            set book_name = #{bookName},
+            author = #{author},
+            pub_date = #{pubDate},
+            word_number = #{wordNumber},
+            price = #{price},
+            enter_time = #{enterTime},
+            status = #{status} where id = #{id}
+    </update>
+
+    <insert id="addRecord" parameterType="com.etoak.java.bean.BorrowRecord">
+        insert into
+            borrow_record(book_id,borrower_name,borrower_sno,phone,borrow_time,return_time,return_state,remarks)
+            values(#{bookId},#{borrowerName},#{borrowerSno},#{phone},#{borrowTime},#{returnTime},#{returnState},#{remarks})
+    </insert>
+    <select id="getAllRecords" resultMap="BorrowRecordResult">
+        select * from borrow_record
+    </select>
+    <select id="getRecordsById" resultMap="BorrowRecordResult">
+        select * from borrow_record where id = #{id}
+    </select>
+    <select id="getRecordsByBookId" resultMap="BorrowRecordResult">
+        select * from borrow_record where book_id = #{bookId}
+    </select>
+    <select id="getRecordsList"
+            resultMap="BorrowRecordResult"
+            parameterType="com.etoak.java.bean.BorrowRecord">
+        select * from borrow_record
+        <where>
+            <if test="borrowerName != null and borrowerName != ''">
+                and borrower_name = #{borrowerName}
+            </if>
+            <if test="borrowerSno != null and borrowerSno != ''">
+                and borrower_sno = #{borrowerSno}
+            </if>
+
+        </where>
+    </select>
+
+    <update id="updateRecordById" parameterType="com.etoak.java.bean.BorrowRecord">
+        update borrow_record
+            set book_id = #{bookId},
+            borrower_name = #{borrowerName},
+            borrower_sno = #{borrowerSno},
+            phone = #{phone},
+            borrow_time = #{borrowTime},
+            return_time = #{returnTime},
+            return_state = #{returnState},
+            remarks = #{remarks} where id = #{id}
+    </update>
+
+    <select id="getRecordByBookName" resultMap="BorrowRecordResult">
+      select r.*
+        from borrow_record r left join book_information i on r.book_id = i.id
+        where i.book_name = #{bookName}
+    </select>
+</mapper>

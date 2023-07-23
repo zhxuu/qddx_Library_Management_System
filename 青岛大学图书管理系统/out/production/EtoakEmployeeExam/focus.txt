@@ -1,0 +1,70 @@
+企业中创建包结构：
+    唯一性： main.java.bean.HsRecord
+    企业的域名：etoak.com   baidu.com
+    com
+        etoak
+            java
+                bean
+                service
+                dao
+                utils
+
+    MYSQL
+        DAO层 ORM层：Java和MYSQL之间的数据交互
+        业务层：Service
+                1.将收集到的杂乱的数据整理，计算最终的到一个可靠的
+                数据
+        控制层：Controller
+1.如何讲一个普通类变成servlet类？
+让普通类继承HttpServlet类
+public class TestServlet extends HttpServlet
+2.请求如何被Servlet拦截
+   1.在web.xml中定义
+                <!--定义servlet路径-->
+                <!--<servlet>-->
+                        <!--<servlet-name>TestServlet</servlet-name>-->
+                        <!--<servlet-class>com.etoak.java.web.TestServlet</servlet-class>-->
+
+                    <!--</servlet>-->
+                <!--哪些url路径会被拦截-->
+                    <!--<servlet-mapping>-->
+                        <!--<servlet-name>TestServlet</servlet-name>-->
+                        <!--<url-pattern>/test.do</url-pattern>-->
+                    <!--</servlet-mapping>-->
+   2.注解
+   在TestServlet类名上添加@WebServlet注解
+   @WebServlet(urlPatterns = "/test.do")
+   public class TestServlet extends HttpServlet{
+       @Override
+       protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+           System.out.println("doGet方法被调用了");
+           super.doGet(req, resp);
+       }
+   }
+   *：如果都配置了 那个优先？
+
+   重名 注解不管用了
+
+   2022/11/21
+    1.什么是请求？
+    请求地址：向什么地方发送请求？URL
+    请求方式：get
+    请求头：
+    请求体：请求参数！
+    2.请求的方式：
+    GET请求
+    POST请求
+    //PUT请求
+    //DELETE请求
+    3.httpServlet 是一个单实例多线程的类
+    单实例：类只有一个对象
+    Java中最简单的设计模式：单例模式
+    //1.私有化构造方法
+    只有一个对象，但是多个线程可以同时访问这个对象
+    4.httpServlet的生命周期：
+    init()方法，多次请求的话，只会调用一次！
+    service()\doGet()\doPost()
+    destory()将service对象进行销毁
+
+
+

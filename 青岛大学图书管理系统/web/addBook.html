@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>添加书籍信息</title>
+<!-- 引入JQuery的相关文件
+     JQuery.js要在Bootstrap之前引入，因为Bootstrap.js
+     是在JQuery的基础上实现的
+ -->
+<script type="application/javascript"
+        src="static/jquery-3.6.1.min.js">
+</script>
+<!-- 引入Bootstrap的相关文件 -->
+<script type="application/javascript"
+        src="static/bootstrap.min.js"></script>
+<link type="text/css"
+      rel="stylesheet"
+      href="static/bootstrap.min.css"/>
+<style>
+    .body{
+        text-align: center;
+        padding: 20px 200px;
+    }
+</style>
+</head>
+<body class="body">
+<h3>添加书籍信息</h3>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="control-label col-sm-2">书名</label>
+        <div class="col-sm-10">
+            <input id="bookName" class="form-control" placeholder="请输入书名"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">作者</label>
+        <div class="col-sm-10">
+            <input id="author" class="form-control" placeholder="请输入作者姓名"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2">出版时间</label>
+        <div class="col-sm-10">
+            <input id="pubDate" name="pubDate" class="form-control" placeholder="请输入出版时间"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">字数</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input id="wordNumber" class="form-control" placeholder="请输入字数">
+                <span class="input-group-addon">万字</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">定价</label>
+        <div class="col-sm-10">
+            <input id="price" class="form-control" placeholder="请输入定价"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">入库时间</label>
+        <div class="col-sm-10">
+            <input id="enterTime" class="form-control" placeholder="请输入入库时间"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">图书状态</label>
+        <label class="radio-inline">
+            <input type="radio" name="status" value="0" checked> 在库
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="status" value="1"> 借出
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="status" value="2"> 破损
+        </label>
+    </div>
+    <button id="add-btn" type="button" class="btn btn-success">添加图书</button>
+    <button type="reset" class="btn btn-warning">重置</button>
+</form>
+</body>
+<script type="application/javascript">
+    //document.getElementById("name").value;
+    $(function (){
+        $("#add-btn").click(function (){
+
+            // 获取书名
+            var bookName = $("#bookName").val();
+            if(bookName == null || bookName == ''){
+                $('#bookName').closest('.col-sm-10').closest('.form-group').addClass('has-error')
+                return;
+            }
+            // 获取作者
+            var author = $("#author").val();
+            //出版时间
+            var pubDate = $("#pubDate").val();
+            // 获取字数
+            var wordNumber = $("#wordNumber").val();
+            // 获取定价
+            var price = $("#price").val();
+            // 获取入库时间
+            var enterTime = $("#enterTime").val();
+            // 获取status 单选框
+            var status = $('input[name="status"]:checked').val();
+
+            // 发送 异步请求
+            $.ajax({
+                // 向什么地方发送ajax请求
+                url:'http://localhost:8081/addBook',
+                // 请求的方式 默认是get
+                type:'POST',
+                // 携带的参数  对象类型
+                data:{
+                    "bookName":bookName,
+                    author,pubDate,wordNumber,price,enterTime,status
+                },
+                // 请求成功时调用的函数  res返回的结果
+                success: function (res){
+                    // console.log(res);
+                    alert(res.msg);
+                    $(location).attr("href","BookList.html");
+                }
+            })
+        });
+    })
+</script>
+</html>
